@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   FormControl,
@@ -34,12 +33,12 @@ const LoginForm = () => {
           <VStack spacing={4}>
             <FormControl>
               <Input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="email *"
+                type="text"
+                id="username"
+                name="username"
+                placeholder="username *"
                 color={"white"}
-                value={formData.email}
+                value={formData.username}
                 onChange={handleInputChange}
               />
             </FormControl>

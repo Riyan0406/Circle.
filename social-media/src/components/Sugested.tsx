@@ -1,45 +1,83 @@
 import { Avatar, Box, Button, Flex, Text } from "@chakra-ui/react";
-import { useState } from "react";
-import { ISuges } from "../types/suges";
+import { useEffect, useState } from "react";
+import { IUser } from "../types/users";
+import useUsers from "../hoocks/useUsers";
+import ButtonFollow from "./ButtonFollow";
 
-const Sugessted: React.FC<ISuges> = ({
-  author_fullname,
-  author_username,
-  author_picture,
-}) => {
-  const [isFollowed, setIsFollowed] = useState(false);
+const Suggested: React.FC = () => {
+  const [isFollowed, setIsFollowed] = useState<{ [key: number]: boolean }>({});
+  const [users, setUsers] = useState<IUser[]>([]);
+  const { getUsers } = useUsers();
 
-  const handleFollow = () => {
-    setIsFollowed(!isFollowed);
+  const fetchUsers = async () => {
+    try {
+      const response = await getUsers();
+      if (response.status) {
+        setUsers(response.data.data.users);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleFollow = (userId: number) => {
+    setIsFollowed((prevState) => ({
+      ...prevState,
+      [userId]: !prevState[userId],
+    }));
+  };
+
   return (
-    <>
-      <Box maxW="md" pt={"4"}>
-        <Flex justifyContent="space-between" alignItems="center" mb="4">
+    <Box
+      maxW="md"
+      pt={4}
+      overflowY="auto"
+      h="200px"
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "0",
+        },
+        "&::-webkit-scrollbar-track": {
+          width: "0",
+        },
+      }}
+    >
+      {users.map((user) => (
+        <Flex
+          key={user.id}
+          justifyContent="space-between"
+          alignItems="center"
+          mb={4}
+        >
           <Flex alignItems="center">
-            <Avatar name="Segun Adebayo" src={author_picture} />
-            <Box ml="4">
-              <Text fontSize={"sm"} color={"#ffffff"}>
-                {author_fullname}
+            <Avatar
+              name={user.fullname}
+              src={"http://localhost:3002/uploads/" + user.profile.avatar}
+            />
+            <Text ml={4}>
+              {user.fullname}
+              <Text color="gray.400" fontSize="sm" fontWeight="normal">
+                @{user.username}
               </Text>
-              <Text fontSize={"sm"} color={"#909090"}>
-                {author_username}
-              </Text>
-            </Box>
+            </Text>
           </Flex>
           <Button
-            onClick={handleFollow}
-            colorScheme={isFollowed ? "red" : "blue"}
+            onClick={() => handleFollow(user.id)}
+            colorScheme={isFollowed[user.id] ? "red" : "blue"}
             variant="ghost"
-            textAlign={"end"}
+            textAlign="end"
             size="sm"
           >
-            {isFollowed ? "Following" : "Follow"}
+            <ButtonFollow followingId={user.id} isFollowing={false} />
           </Button>
         </Flex>
-      </Box>
-    </>
+      ))}
+    </Box>
   );
 };
 
-export default Sugessted;
+export default Suggested;

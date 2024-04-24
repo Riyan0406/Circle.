@@ -34,7 +34,7 @@ const RegisterForm = () => {
     e.preventDefault();
     console.log("Data Form:", formData);
     await getRegister(formData);
-    navigate("login");
+    navigate("/login");
     setFormData({
       fullname: "",
       username: "",
@@ -66,6 +66,7 @@ const RegisterForm = () => {
             <FormControl>
               <Input
                 type="text"
+                color={"white"}
                 id="fullname"
                 name="fullname"
                 placeholder="Full Name *"
@@ -76,6 +77,7 @@ const RegisterForm = () => {
             <FormControl>
               <Input
                 type="text"
+                color={"white"}
                 id="username"
                 name="username"
                 placeholder="username *"
@@ -86,6 +88,7 @@ const RegisterForm = () => {
             <FormControl>
               <Input
                 type="email"
+                color={"white"}
                 id="email"
                 name="email"
                 placeholder="Email *"
@@ -96,6 +99,7 @@ const RegisterForm = () => {
             <FormControl>
               <Input
                 type="password"
+                color={"white"}
                 id="password"
                 name="password"
                 placeholder="Password *"

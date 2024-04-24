@@ -9,8 +9,10 @@ import {
 import { Heart } from "react-feather";
 import ButtonPost from "./ButtonPost";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../store";
 
 function Navbar() {
+  const auth = useAppSelector((state) => state.auth);
   return (
     <Flex
       height={"100vh"}
@@ -21,45 +23,88 @@ function Navbar() {
       p="4"
       w={"400px"}
       position="fixed"
-      top="0"
-      left="0"
       borderRight="1px solid gray"
     >
       <Box w={"100%"} h={"100%"} position="relative">
         <Text p="2" as="b" fontSize="6xl" color="#04A51E" ml={"19px"}>
           Circle
         </Text>
-        <Box>
-          <Button
-            leftIcon={<FontAwesomeIcon icon={faHome} />}
-            color="#ffffff"
-            variant="ghost"
-          >
-            Home
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            leftIcon={<FontAwesomeIcon icon={faSearch} />}
-            color="#ffffff"
-            variant="ghost"
-          >
-            Search
-          </Button>
-        </Box>
-        <Box>
-          <Button leftIcon={<Heart />} color="#ffffff" variant="ghost">
-            Follows
-          </Button>
-        </Box>
-        <Box>
-          <Button
-            leftIcon={<FontAwesomeIcon icon={faUser} />}
-            color="#ffffff"
-            variant="ghost"
-          >
-            <Link to="/profile">Profile</Link>
-          </Button>
+        <Box display={"flex"} flexDirection={"column"} gap={"15px"}>
+          <Box>
+            <Text
+              color="#ffffff"
+              variant="ghost"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Link to={"/"} style={{ display: "flex", alignItems: "center" }}>
+                <FontAwesomeIcon
+                  icon={faHome}
+                  style={{ marginRight: "0.5rem" }}
+                />
+                Home
+              </Link>
+            </Text>
+          </Box>
+
+          <Box>
+            <Text
+              color="#ffffff"
+              variant="ghost"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Link
+                to={"/search"}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  style={{ marginRight: "0.5rem" }}
+                />
+                Search
+              </Link>
+            </Text>
+          </Box>
+          <Box>
+            <Text
+              color="#ffffff"
+              variant="ghost"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Link
+                to={"/follows"}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <Heart style={{ marginRight: "0.5rem" }} />
+                Follows
+              </Link>
+            </Text>
+          </Box>
+          <Box>
+            <Text
+              color="#ffffff"
+              variant="ghost"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Link
+                to={`/profile/${auth.user?.id}`}
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <FontAwesomeIcon
+                  icon={faUser}
+                  style={{ marginRight: "0.5rem" }}
+                />
+                Profile
+              </Link>
+            </Text>
+          </Box>
         </Box>
 
         <ButtonPost />

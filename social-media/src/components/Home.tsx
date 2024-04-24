@@ -49,8 +49,10 @@ const Home = () => {
               type="file"
               placeholder="Select file"
               opacity={0}
-              width={"5"}
+              width={"3"}
               name="image"
+              multiple
+              max={4}
               onChange={handleChange}
             />
           </InputGroup>

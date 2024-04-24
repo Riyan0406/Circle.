@@ -1,43 +1,52 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import LoginForm from "./components/Login";
 import RegisterForm from "./components/Register";
 import HomePages from "./pages/homePages";
 import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import ApiConfig, { setAuthToken } from "./libs/index";
-import { AUTH_CHECK } from "./store/rootReducer";
-import { AUTH_ERROR } from "./store/rootReducer";
-import { useDispatch } from "react-redux";
+import ApiConfig from "./libs/api";
 import { toast } from "react-toastify";
-import DetailLayout from "./layouts/detailLayout";
 import MyProfileLayout from "./layouts/MyProfileLayout";
+import { useAppDispatch } from "./store";
+import { SET_LOGIN } from "./store/slice/auth";
+import { IUserData } from "./types/login";
+import BasicUsage from "./components/modalEdit";
+import DetailLayout from "./layouts/detailLayout";
+import FollowLayout from "./layouts/followLayout";
+import SearchLayout from "./layouts/SearchLayout";
+import UserProfileLayout from "./layouts/userProfileLayout";
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const authCheck = async () => {
     try {
-      setAuthToken(localStorage.getItem("token"));
-      const response = await ApiConfig.get("/auth/check");
-      dispatch(AUTH_CHECK(response.data));
-      console.log(response.data);
+      const response = await ApiConfig.get("/profile", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      dispatch(
+        SET_LOGIN({
+          user: response.data.data as IUserData,
+          token: localStorage.getItem("token") as string,
+        })
+      );
+      console.log(response.data.data);
     } catch (err) {
       console.log(err);
-      dispatch(AUTH_ERROR());
       navigate("/login");
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     authCheck();
   }, []);
 
-  useEffect(() => {
-    const sse = new EventSource("http://localhost:3002/api/v1/notifications");
-    sse.onmessage = () => {
-      toast("Thread have a new await");
-    };
-  }, []);
+  // useEffect(() => {
+  //   const sse = new EventSource("http://localhost:3002/api/v1/notifications");
+  //   sse.onmessage = () => {
+  //     toast("Thread have a new await");
+  //   };
+  // }, []);
   const isLogin = () => {
     if (!localStorage.getItem("token")) {
       return <Navigate to="/login" />;
@@ -51,7 +60,11 @@ function App() {
         <Route path="/" element={isLogin()}>
           <Route path="/" element={<HomePages />} />
           <Route path="/detail/:id" element={<DetailLayout />} />
-          <Route path="/profile" element={<MyProfileLayout />} />
+          {/* <Route path="/profile" element={<MyProfileLayout />} /> */}
+          <Route path="/edit" element={<BasicUsage />} />
+          <Route path="/follows" element={<FollowLayout />} />
+          <Route path="/search" element={<SearchLayout />} />
+          <Route path="/profile/:profileId" element={<UserProfileLayout />} />
         </Route>
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />

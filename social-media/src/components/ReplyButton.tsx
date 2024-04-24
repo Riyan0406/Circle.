@@ -1,10 +1,36 @@
 import { Button, Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useComment from "../hoocks/useComment";
+import { useState } from "react";
+import useReply from "../hoocks/useReply";
 
-const Comment = () => {
-  const { handleChange, handleSubmit, form } = useComment();
+interface IReplyButtonProps {
+  threadId: number;
+}
+
+const Comment: React.FC<IReplyButtonProps> = ({ threadId }) => {
+  const [conten, setContent] = useState("");
+  const [image, setImages] = useState([]);
+  const { postReply } = useReply();
+
+  const handleChange = (event: any) => {
+    if (event.target.name === "conten") {
+      setContent(event.target.value);
+    } else if (event.target.name === "image") {
+      setImages(event.target.files);
+    }
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    try {
+      await postReply(threadId, conten, image);
+      setContent("");
+      setImages([]);
+    } catch (error) {
+      console.error("Error posting reply:", error);
+    }
+  };
 
   return (
     <>
@@ -20,14 +46,14 @@ const Comment = () => {
         encType="multipart/form-data"
       >
         <Input
-          placeholder="What's replaying"
+          placeholder="What's replying"
           color="white"
           type="text"
           mr="2"
           w="60%"
           border="none"
-          name="comment_text"
-          value={form.comment_text}
+          name="conten"
+          value={conten}
           onChange={handleChange}
         />
         <InputGroup mr="10" w="5%">
@@ -44,6 +70,7 @@ const Comment = () => {
             name="image"
             onChange={handleChange}
             accept="image/*"
+            multiple
           />
         </InputGroup>
         <Button
@@ -56,7 +83,7 @@ const Comment = () => {
           bg="#005E0E"
           _hover={{ bg: "#04A51E" }}
         >
-          Replay
+          Reply
         </Button>
       </form>
     </>

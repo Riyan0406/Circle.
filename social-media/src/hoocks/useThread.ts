@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ApiConfig, { setAuthToken, setMultiPart } from "../libs";
+import ApiConfig, { setAuthToken, setMultiPart } from "../libs/api";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -7,25 +7,18 @@ const useThread = () => {
   const [form, setForm] = useState({
     conten: "",
     image: null,
+    threadId: undefined,
   });
   const [detail, setDetail] = useState<any>([]);
   const navigate = useNavigate();
-  const {
-    data: thread,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery({
-    queryKey: ["threads"],
-    queryFn: async () => {
-      const token = localStorage.getItem("token");
-      setAuthToken(token);
-      const response = await ApiConfig.get("/threads");
-      console.log(" detail", response.data);
-      return response.data;
-    },
-  });
+
+  const getThreads = async () => {
+    return await ApiConfig.get("/threads", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+  };
 
   const getthreadById = async (id: any): Promise<void> => {
     try {
@@ -74,16 +67,13 @@ const useThread = () => {
       setForm({
         conten: "",
         image: null,
+        threadId: undefined,
       });
     },
-    onSuccess: () => refetch(),
   });
 
   return {
-    isLoading,
-    isError,
-    error,
-    thread,
+    getThreads,
     handleChange,
     handleSubmit,
     form,

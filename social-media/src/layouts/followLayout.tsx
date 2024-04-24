@@ -1,14 +1,12 @@
 import { Box } from "@chakra-ui/react";
+import FollowsUi from "../components/followsUi";
 import Navbar from "../components/Navbar";
 import ProfileLayout from "./profileLayout";
-import UserProfile from "../components/UserProfile";
-import { useParams } from "react-router-dom";
 
-const MyProfileLayout = () => {
-  const { profileId } = useParams();
+const FollowLayout: React.FC = () => {
   return (
     <>
-      <Box w={"71%"} bg={"#1d1d1d"}>
+      <Box w={"71%"} h={"100vh"} bg={"#1d1d1d"}>
         <Navbar />
         <div
           style={{
@@ -16,7 +14,7 @@ const MyProfileLayout = () => {
           }}
         >
           <Box bg={"#1d1d1d"}>
-            <UserProfile profileId={Number(profileId)} />
+            <FollowsUi />
           </Box>
         </div>
         <ProfileLayout />
@@ -25,4 +23,4 @@ const MyProfileLayout = () => {
   );
 };
 
-export default MyProfileLayout;
+export default FollowLayout;

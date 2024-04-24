@@ -1,42 +1,45 @@
-export interface IUser {
+export interface IThreadImage {
+  image?: string;
+}
+
+export interface IProfile {
+  avatar?: string;
+  cover?: string;
+}
+
+export interface IAuthor {
   id: number;
   fullname: string;
   username: string;
-  email: string;
-  profile: string;
-  sampul: string;
+  profile: IProfile;
 }
 
-export interface IUserComment {
+export interface IReply {
   id: number;
-  fullname: string;
-  username: string;
-  email: string;
-  profile: string;
-  sampul: string;
-}
-
-export interface IThread {
-  id: number;
-  user: IUser;
-  post: IUserComment;
-  comment: IComment[];
-  image: string;
-  conten: string;
-  postAt: string;
-  totalLikes: number;
-  totalComments: number;
-}
-export interface IComment {
-  comment_id: number;
-  comment_text: string;
-  image: string;
-  comment_date: string;
-  user: {
-    fullname: string;
+  userId: number;
+  author: {
     username: string;
-    email: string;
-    profile: string;
-    sampul: string;
+    fullname: string;
   };
+  conten: string;
+  image: IThreadImage[];
+}
+
+export interface IData {
+  id: number;
+  conten?: string;
+  createdAt: string;
+  userId: number;
+  threadId: number | null;
+  image: IThreadImage[];
+  author: IAuthor;
+  replies: IReply[];
+  _count: {
+    replies: number;
+    like: number;
+  };
+}
+
+export interface IResponse {
+  data: IData[];
 }

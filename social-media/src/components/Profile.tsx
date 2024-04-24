@@ -1,21 +1,37 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Avatar, Box, Button, Flex, Image, Link, Text } from "@chakra-ui/react";
+import { Box, Image, Text } from "@chakra-ui/react";
 import { useState } from "react";
-import { RootState } from "../store/types/rootState";
-import { useSelector } from "react-redux";
+import { RootState, useAppSelector } from "../store";
+import BasicUsage from "./modalEdit";
 
 const Profile: React.FC = () => {
   const [isFollowed, setIsFollowed] = useState(false);
-  const { fullname, username, email, profile, sampul } = useSelector(
-    (state: RootState) => state.auth
-  );
+
+  const profile = useAppSelector((state: RootState) => state.auth);
+
+  if (!profile || !profile.user) {
+    return null;
+  }
+
+  const { user } = profile;
+
+  console.log("uuuu", { user });
 
   const handleFollow = () => {
     setIsFollowed(!isFollowed);
   };
+
   return (
     <>
-      <Box p="4" as="b" mx={"auto"} bg={"#262626"} position="relative">
+      <Box
+        p="4"
+        as="b"
+        mx={"auto"}
+        bg={"#262626"}
+        position="relative"
+        w={"90%"}
+        borderRadius={"10"}
+        border={"1px solid gray"}
+      >
         <h6>My Profile</h6>
         <Box
           mt="5"
@@ -25,7 +41,7 @@ const Profile: React.FC = () => {
           h={"80px"}
         >
           <Image
-            src="https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg"
+            src={"http://localhost:3002/uploads/" + user?.cover}
             alt="Cover Image"
             w={"full"}
             h={"full"}
@@ -38,20 +54,20 @@ const Profile: React.FC = () => {
           />
 
           <Image
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            src={"http://localhost:3002/uploads/" + user?.avatar}
             alt=""
             mr="2"
             w={"10"}
             h={"10"}
+            border={"2px solid white"}
+            borderRadius={"full"}
             zIndex="1"
             position="relative"
             bottom="-40px"
             left={"3"}
           />
 
-          <Link
-            href="https://chakra-ui.com"
-            isExternal
+          <Text
             display={"flex"}
             alignItems={"center"}
             position="relative"
@@ -59,29 +75,29 @@ const Profile: React.FC = () => {
             top={"26px"}
             right={"2"}
           >
-            Edit Profile <ExternalLinkIcon mx="2px" />
-          </Link>
+            <BasicUsage />
+          </Text>
         </Box>
         <Box mt="3">
-          <Text>👋{fullname}👋</Text>
+          <Text>👋{profile.user?.user?.fullname}👋</Text>
           <Text ml={"2"} fontSize={"sm"} color={"#909090"}>
-            @{username}
+            @{profile.user?.user?.username}
           </Text>
           <Text mt="2" fontSize={"sm"} color={"#ffffff"}>
-            picked over by the worms, and weird fishes
+            {profile.user.bio}
           </Text>
           <Box mt="1" display={"flex"} gap={"4"}>
             <Text fontSize={"sm"} color={"#909090"}>
               <Text as="b" color={"#ffffff"}>
-                1.5k
+                {profile.user?.user?._count.follower}
               </Text>{" "}
-              Followers{" "}
+              Following{" "}
             </Text>
             <Text fontSize={"sm"} color={"#909090"}>
               <Text as="b" color={"#ffffff"}>
-                35
+                {profile.user?.user?._count.following}
               </Text>{" "}
-              Following{" "}
+              Followers{" "}
             </Text>
           </Box>
         </Box>

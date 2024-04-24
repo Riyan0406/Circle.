@@ -1,21 +1,21 @@
 import { Box } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ProfileLayout from "../layouts/profileLayout";
-import HomeLayout from "../layouts/homeLayout";
+import FollowLayout from "../layouts/followLayout";
 
-const HomePages: React.FC = () => {
+const FollowPages: React.FC = () => {
   return (
     <>
-      <Box w={"71%"} h={"100vh"} bg={"#1d1d1d"}>
-        <Navbar />
+      <Box bg={"#1d1d1d"}>
+        <div>
+          <Navbar />
+        </div>
         <div
           style={{
             marginLeft: "400px",
           }}
         >
-          <Box bg={"#1d1d1d"}>
-            <HomeLayout />
-          </Box>
+          <FollowLayout />
         </div>
         <ProfileLayout />
       </Box>
@@ -23,4 +23,4 @@ const HomePages: React.FC = () => {
   );
 };
 
-export default HomePages;
+export default FollowPages;

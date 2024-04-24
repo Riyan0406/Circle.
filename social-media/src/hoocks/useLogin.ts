@@ -1,24 +1,30 @@
 import { useState } from "react";
-import ApiConfig from "../libs";
-import { IUserLogin } from "../types/login";
+import ApiConfig from "../libs/api";
 import { useNavigate } from "react-router-dom";
-import { AUTH_LOGIN } from "../store/rootReducer";
 import { useDispatch } from "react-redux";
+import { IUserLogin } from "../types/login";
+import { SET_LOGIN } from "../store/slice/auth";
+import { useAppDispatch } from "../store";
 
 const useLogin = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [login, setLogin] = useState<IUserLogin[]>([]);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
-  const getLogin = async (data: any): Promise<void> => {
+  const postLogin = async (data: any): Promise<void> => {
     try {
-      const response = await ApiConfig.post("/auth/login", data);
-      setLogin(response.data);
-      dispatch(AUTH_LOGIN(response.data));
+      const response = await ApiConfig.post("/login", data);
+      const token = response.data.data.token.token;
+      const resProfile = await ApiConfig.get("/profile", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      localStorage.setItem("token", token);
+      setLogin(response.data.data.token);
+      dispatch(SET_LOGIN(resProfile.data.data));
     } catch (err) {
       console.log(err);
     }
@@ -34,16 +40,16 @@ const useLogin = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    await getLogin(formData);
+    await postLogin(formData);
     navigate("/");
     setFormData({
-      email: "",
+      username: "",
       password: "",
     });
   };
 
   return {
-    getLogin,
+    postLogin,
     login,
     handleInputChange,
     handleSubmit,

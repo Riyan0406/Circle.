@@ -1,12 +1,13 @@
 import { useState } from "react";
-import ApiConfig, { setAuthToken } from "../libs";
+import ApiConfig, { setAuthToken } from "../libs/api";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const useComment = () => {
   const [form, setForm] = useState({
-    comment_text: "",
+    conten: "",
     image: null,
+    threadId: undefined,
   });
 
   const [comments, setComments] = useState([]);
@@ -27,13 +28,14 @@ const useComment = () => {
   const postComment = async () => {
     try {
       const formData = new FormData();
-      formData.append("comment_text", form.comment_text);
+      formData.append("conten", form.conten);
+      formData.append("threadId", form.threadId as any);
       formData.append("image", form.image as any);
 
       const token = localStorage.getItem("token");
       setAuthToken(token);
 
-      const response = await ApiConfig.post("/comment", formData, {
+      const response = await ApiConfig.post("/thread", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setComments(response.data);
@@ -58,8 +60,9 @@ const useComment = () => {
       await postComment();
       navigate("/");
       setForm({
-        comment_text: "",
+        conten: "",
         image: null,
+        threadId: undefined,
       });
     } catch (error) {
       console.error("Failed to handle submit:", error);

@@ -1,73 +1,60 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 import Navbar from "../components/Navbar";
 import ProfileLayout from "./profileLayout";
 import Detail from "../components/Detail";
-import Home from "../components/Home";
 import { Link, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import useThread from "../hoocks/useThread";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/types/rootState";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState } from "react";
+import useReply from "../hoocks/useReply";
+import { IThreadData } from "../types/replies";
 
 const DetailLayout = () => {
   const { id } = useParams();
-  const { detail, getthreadById } = useThread();
-  const auth = useSelector((state: RootState) => state.auth);
+  const { threadById } = useReply();
+  const [thread, setThread] = useState<IThreadData>();
+  console.log(thread);
+
+  const fetchData = async () => {
+    try {
+      const response = await threadById(Number(id));
+      setThread(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    getthreadById(id);
+    fetchData();
   }, []);
 
   return (
     <>
-      <Box display={"flex"} w={"71%"} h={"100%"} bg={"#1d1d1d"}>
+      <Box w={"71%"} h={"100vh"} bg={"#1d1d1d"}>
         <Navbar />
-        <div
+        <Box
           style={{
             marginLeft: "400px",
-            borderRight: "1px solid gray",
-            borderBottom: "1px solid gray",
-            borderLeft: "1px solid gray",
           }}
         >
-          <Box w={"full"} h={"100%"} bg={"#1d1d1d"}>
-            <Box mt={"3"} p={"4"} bg={"#1d1d1d"} display={"flex"} mb={5}>
-              <Link
-                to="/"
-                style={{
-                  color: "white",
-                  marginLeft: "10px",
-                  marginTop: "10px",
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                  textDecoration: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "15px",
-                }}
-              >
-                <FontAwesomeIcon icon={faArrowLeft} />
-                Status
-              </Link>
-            </Box>
-
-            {detail && (
-              <Detail
-                user={detail.user}
-                id={detail.id}
-                post={detail.post}
-                image={detail.image}
-                postAt={detail.postAt}
-                conten={detail.conten}
-                totalLikes={detail.totalLikes}
-                totalComments={detail.totalComments}
-                comment={detail.comments}
-              />
-            )}
+          <Box p={6}>
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "white",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} /> Status
+            </Link>
           </Box>
-        </div>
+
+          <Box bg={"#1d1d1d"}>
+            <Detail thread={thread!} />
+          </Box>
+        </Box>
         <ProfileLayout />
       </Box>
     </>
