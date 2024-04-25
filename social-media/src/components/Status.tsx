@@ -19,7 +19,7 @@ const Status: React.FC<AllDates> = ({ thread }) => {
   };
 
   return (
-    <Box border={"1px solid rgba(144, 144, 144, 1)"} p={4}>
+    <Box borderTop="1px solid #3f3f3f" p={4}>
       <Box display="flex">
         {thread.author && (
           <Box>

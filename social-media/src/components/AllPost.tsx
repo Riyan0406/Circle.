@@ -1,4 +1,4 @@
-import { Box, Image, Text } from "@chakra-ui/react";
+import { Box, Image, SimpleGrid, Text } from "@chakra-ui/react";
 import { Heart } from "react-feather";
 import { FaCommentAlt } from "react-icons/fa";
 import { RootState, useAppSelector } from "../store";
@@ -36,58 +36,86 @@ const AllPost: React.FC<Props> = ({ userId }) => {
   };
 
   return threads.map((thread) => (
-    <Box key={thread.id} color={"#909090"} border={"1px solid #909090"} p={2}>
-      <Box display={"flex"} flexDirection="row" mt="2" gap={"2"}>
-        <Image
-          src={
-            "http://localhost:3002/uploads/" + thread.author.profile.avatar ||
-            "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-          }
-          alt=""
-          border={"2px solid white"}
-          borderRadius={"full"}
-          mr="2"
-          w={"40px"}
-          h={"40px"}
-        />
-        <Box>
-          <Box display="flex">
-            <Text color="white" fontWeight="bold">
-              {thread.author.fullname}{" "}
-            </Text>
-            <Text color="#909090" ml="1">
-              @{thread.author.username}
-            </Text>{" "}
-            <Text color="gray.400">• {formatDate(thread.createdAt)}</Text>
+    <Box key={thread.id} color={"#909090"} border={"1px solid #3f3f3f"}>
+      <Box p={"3"}>
+        <Box
+          display={"flex"}
+          alignItems={"center"}
+          flexDirection="row"
+          mt="2"
+          gap={"2"}
+        >
+          <Image
+            src={
+              "http://localhost:3002/uploads/" + thread.author.profile.avatar ||
+              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            }
+            alt=""
+            border={"2px solid white"}
+            borderRadius={"full"}
+            mr="2"
+            w={"40px"}
+            h={"40px"}
+          />
+          <Box>
+            <Box display="flex">
+              <Text color="white" fontWeight="bold">
+                {thread.author.fullname}{" "}
+              </Text>
+              <Text color="#909090" ml="1">
+                @{thread.author.username}{" "}
+              </Text>{" "}
+              <Text color="gray.400">
+                {" "}
+                {""}• {formatDate(thread.createdAt)}
+              </Text>
+            </Box>
           </Box>
-          <Text color="#ffffff" mt={3} textAlign={"justify"}>
-            {thread.conten}
+        </Box>
+
+        <Text color="#ffffff" mt={3} textAlign={"justify"}>
+          {thread.conten}
+        </Text>
+        {thread.image && thread.image.length > 0 && (
+          <Box mt={2}>
+            {thread.image.length === 1 ? (
+              <Image
+                src={"http://localhost:3002/uploads/" + thread.image[0].image}
+                mt={2}
+                w="100%"
+                h="300px"
+                borderRadius={"12px"}
+                objectFit="cover"
+                objectPosition="center"
+              />
+            ) : (
+              <SimpleGrid columns={2} spacing={1}>
+                {thread.image.map((image, index) => (
+                  <Image
+                    key={index}
+                    src={"http://localhost:3002/uploads/" + image.image}
+                    h="200px"
+                    objectFit="cover"
+                    objectPosition="center"
+                  />
+                ))}
+              </SimpleGrid>
+            )}
+          </Box>
+        )}
+        <Box mt={2} ms={4} display="flex" alignItems="center">
+          <Heart color="#909090" width={"20px"} />
+          <Text ml={1} color="gray.400">
+            {thread._count.like} Likes
           </Text>
-          {thread.image.map((image: any, index: any) => (
-            <Image
-              key={index}
-              src={"http://localhost:3002/uploads/" + image.image}
-              alt={`Image ${index}`}
-              mt={2}
-              w="100%"
-              maxHeight="300px"
-              objectFit="cover"
-            />
-          ))}
-          <Box mt={2} display="flex" alignItems="center">
-            <Heart color="#909090" width={"20px"} />
-            <Text ml={1} color="gray.400">
-              {thread._count.like} Likes
-            </Text>
-            <FaCommentAlt
-              color="#909090"
-              width={"20px"}
-              style={{ marginLeft: "20px" }}
-            />
-            <Text ml={1} color="gray.400">
-              {thread._count.reply} Replies
-            </Text>
-          </Box>
+          <FaCommentAlt
+            color="#909090"
+            width={"20px"}
+            style={{ marginLeft: "20px" }}
+          />
+          <Text ml={1} color="gray.400">
+            {thread._count.reply} Replies
+          </Text>
         </Box>
       </Box>
     </Box>

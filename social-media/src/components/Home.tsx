@@ -51,8 +51,8 @@ const Home = () => {
               opacity={0}
               width={"3"}
               name="image"
+              accept="image/*"
               multiple
-              max={4}
               onChange={handleChange}
             />
           </InputGroup>

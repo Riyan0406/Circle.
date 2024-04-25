@@ -1,6 +1,7 @@
 import { Box, Flex, Button, Text } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faHeart,
   faHome,
   faSearch,
   faSignOutAlt,
@@ -23,7 +24,7 @@ function Navbar() {
       p="4"
       w={"400px"}
       position="fixed"
-      borderRight="1px solid gray"
+      borderRight="1px solid #3f3f3f"
     >
       <Box w={"100%"} h={"100%"} position="relative">
         <Text p="2" as="b" fontSize="6xl" color="#04A51E" ml={"19px"}>
@@ -36,9 +37,15 @@ function Navbar() {
               variant="ghost"
               display="flex"
               alignItems="center"
-              justifyContent="space-between"
+              ml={5}
+              mb={3}
             >
-              <Link to={"/"} style={{ display: "flex", alignItems: "center" }}>
+              <Link
+                to={"/"}
+                style={{
+                  marginLeft: "10px",
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faHome}
                   style={{ marginRight: "0.5rem" }}
@@ -54,12 +61,10 @@ function Navbar() {
               variant="ghost"
               display="flex"
               alignItems="center"
-              justifyContent="space-between"
+              ml={5}
+              mb={3}
             >
-              <Link
-                to={"/search"}
-                style={{ display: "flex", alignItems: "center" }}
-              >
+              <Link to={"/search"} style={{ marginLeft: "10px" }}>
                 <FontAwesomeIcon
                   icon={faSearch}
                   style={{ marginRight: "0.5rem" }}
@@ -74,13 +79,14 @@ function Navbar() {
               variant="ghost"
               display="flex"
               alignItems="center"
-              justifyContent="space-between"
+              ml={5}
+              mb={3}
             >
-              <Link
-                to={"/follows"}
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <Heart style={{ marginRight: "0.5rem" }} />
+              <Link to={"/follows"} style={{ marginLeft: "10px" }}>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  style={{ marginRight: "0.5rem" }}
+                />
                 Follows
               </Link>
             </Text>
@@ -91,11 +97,12 @@ function Navbar() {
               variant="ghost"
               display="flex"
               alignItems="center"
-              justifyContent="space-between"
+              ml={5}
+              mb={3}
             >
               <Link
                 to={`/profile/${auth.user?.id}`}
-                style={{ display: "flex", alignItems: "center" }}
+                style={{ marginLeft: "10px" }}
               >
                 <FontAwesomeIcon
                   icon={faUser}

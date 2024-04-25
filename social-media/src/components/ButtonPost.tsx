@@ -28,7 +28,7 @@ const ButtonPost = () => {
         py={"5"}
         mt={"4"}
         size="xs"
-        w={"100%"}
+        w={"80%"}
         bg="#04A51E"
         borderRadius="10px"
         onClick={onOpen}

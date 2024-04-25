@@ -5,16 +5,14 @@ import useUsers from "../hoocks/useUsers";
 import ButtonFollow from "./ButtonFollow";
 
 const Suggested: React.FC = () => {
-  const [isFollowed, setIsFollowed] = useState<{ [key: number]: boolean }>({});
+  // const [isFollowed, setIsFollowed] = useState<{ [key: number]: boolean }>({});
   const [users, setUsers] = useState<IUser[]>([]);
   const { getUsers } = useUsers();
 
   const fetchUsers = async () => {
     try {
       const response = await getUsers();
-      if (response.status) {
-        setUsers(response.data.data.users);
-      }
+      setUsers(response.data.data.users);
     } catch (err) {
       console.log(err);
     }
@@ -24,12 +22,12 @@ const Suggested: React.FC = () => {
     fetchUsers();
   }, []);
 
-  const handleFollow = (userId: number) => {
-    setIsFollowed((prevState) => ({
-      ...prevState,
-      [userId]: !prevState[userId],
-    }));
-  };
+  // const handleFollow = (userId: number) => {
+  //   setIsFollowed((prevState) => ({
+  //     ...prevState,
+  //     [userId]: !prevState[userId],
+  //   }));
+  // };
 
   return (
     <Box
@@ -65,15 +63,7 @@ const Suggested: React.FC = () => {
               </Text>
             </Text>
           </Flex>
-          <Button
-            onClick={() => handleFollow(user.id)}
-            colorScheme={isFollowed[user.id] ? "red" : "blue"}
-            variant="ghost"
-            textAlign="end"
-            size="sm"
-          >
-            <ButtonFollow followingId={user.id} isFollowing={false} />
-          </Button>
+          <ButtonFollow followingId={user.id} />
         </Flex>
       ))}
     </Box>

@@ -7,7 +7,6 @@ const useThread = () => {
   const [form, setForm] = useState({
     conten: "",
     image: null,
-    threadId: undefined,
   });
   const [detail, setDetail] = useState<any>([]);
   const navigate = useNavigate();
@@ -36,9 +35,13 @@ const useThread = () => {
       setAuthToken(token);
       setMultiPart();
       const response = await ApiConfig.post("/thread", data, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
-      setForm(response.data);
+      setForm(response.data.data);
+      console.log("data post", response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -67,7 +70,6 @@ const useThread = () => {
       setForm({
         conten: "",
         image: null,
-        threadId: undefined,
       });
     },
   });

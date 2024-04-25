@@ -3,6 +3,8 @@ import ApiConfig from "../libs/api";
 import { Box, Text } from "@chakra-ui/react";
 import { Heart } from "react-feather";
 import { FaCommentAlt } from "react-icons/fa";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 interface ILikeButtonProps {
   threadId: number;
@@ -69,14 +71,13 @@ const ButtonLike: React.FC<ILikeButtonProps> = ({ threadId }) => {
   return (
     <>
       <Box display="flex" alignItems="center" ms={3}>
-        <Heart
+        <FontAwesomeIcon
+          icon={faHeart}
           onClick={handleLike}
           color={liked ? "red" : "#909090"}
           width={"20px"}
         />
-        <Text color="gray.400" ml={2}>
-          {likeCount} Likes
-        </Text>
+        <Text color={"grey"}>{likeCount} Likes</Text>
       </Box>
     </>
   );

@@ -11,7 +11,7 @@ const UsersFollowers = () => {
   const fetchUsers = async () => {
     try {
       const response = await getFollower();
-      console.log("response", response.data.data);
+      console.log("response follower", response);
 
       setUsers(response.data.data);
     } catch (error) {
@@ -25,7 +25,7 @@ const UsersFollowers = () => {
 
   return (
     <>
-      {users.map((user: any) => (
+      {users.map((user) => (
         <Box
           key={user.id}
           w={"100%"}
@@ -45,7 +45,7 @@ const UsersFollowers = () => {
             />
 
             <Text color={"white"} fontWeight={"bold"} fontSize={"lg"}>
-              {user.fullname}
+              {user.fullname} {user.id}
               <Text color={"gray.400"} fontSize={"sm"} fontWeight={"normal"}>
                 @{user.username}
               </Text>
@@ -55,7 +55,7 @@ const UsersFollowers = () => {
             </Text>
           </Box>
 
-          <ButtonFollow followingId={user.id} isFollowing={false} />
+          <ButtonFollow followingId={user.id} />
         </Box>
       ))}
     </>

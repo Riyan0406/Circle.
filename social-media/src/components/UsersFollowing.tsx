@@ -53,7 +53,7 @@ const UsersFollowing = () => {
             </Text>
           </Box>
 
-          <ButtonFollow followingId={user.id} isFollowing={true} />
+          <ButtonFollow followingId={user.id} />
         </Box>
       ))}
     </>

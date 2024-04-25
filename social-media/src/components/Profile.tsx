@@ -30,7 +30,7 @@ const Profile: React.FC = () => {
         position="relative"
         w={"90%"}
         borderRadius={"10"}
-        border={"1px solid gray"}
+        border="1px solid #3f3f3f"
       >
         <h6>My Profile</h6>
         <Box
